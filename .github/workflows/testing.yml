@@ -43,6 +43,7 @@ jobs:
       - name: Run console
         run: |
           nim c -r console/nim/why.nim
+
   python:
     name: Python
     runs-on: ${{ matrix.os }}
@@ -61,6 +62,7 @@ jobs:
       - name: Run console
         run: |
           python console/python3/why.py
+
   erlang:
     runs-on: ubuntu-latest
     name: Erlang
@@ -74,6 +76,7 @@ jobs:
         run: |
           cd console/erlang
           echo "c(why), why:why()." | erl -s init stop
+
   csharp:
     runs-on: ubuntu-latest
     name: C#
@@ -88,3 +91,28 @@ jobs:
           cd console/csharp
           mono-csc why.cs -unsafe
           mono why.exe
+
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run JavaScript file
+        run: |
+          cd console/js
+          node why.js
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install TypeScript
+        run: npm install -g typescript
+      - name: Compile and run TypeScript file
+        run: |
+          cd console/ts
+          tsc why.ts
+          node why.js
