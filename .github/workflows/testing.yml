@@ -88,10 +88,8 @@ jobs:
           sudo apt update
           sudo apt install -y mono-complete
           sudo apt -y install chicken-bin
-      - name: Compile with csc
+      - name: Run console
         run: |
           cd console/csharp
-          mono-csc why.cs --unsafe
-      - name: Run the compiled executable
-        run: |
-          mono why.exe
+          mono-csc why.cs -unsafe
+          why
