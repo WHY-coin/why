@@ -83,19 +83,14 @@ jobs:
           - '6.0.x'
     steps:
       - uses: actions/checkout@v4
-      - name: Setup dotnet ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Setup console project
+      - name: Install Mono (for `csc` usage)
         run: |
-          mkdir myapp
-          cd myapp
-          dotnet new console -n MyConsoleApp
-          ls
-          ls ../console/csharp
-          mv ../console/csharp/why.cs ./Program.cs
-      - name: Run console
+          sudo apt update
+          sudo apt install -y mono-complete
+      - name: Compile with csc
         run: |
-          cd myapp
-          dotnet run
+          cd console/csharp
+          csc /unsafe why.cs
+      - name: Run the compiled executable
+        run: |
+          mono why.exe
