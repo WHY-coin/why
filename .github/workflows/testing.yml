@@ -91,7 +91,7 @@ jobs:
       - name: Compile with csc
         run: |
           cd console/csharp
-          csc why.cs
+          mono-csc why.cs
       - name: Run the compiled executable
         run: |
           mono why.exe
