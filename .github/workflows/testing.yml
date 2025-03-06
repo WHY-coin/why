@@ -92,5 +92,4 @@ jobs:
         run: |
           cd console/csharp
           mono-csc why.cs -unsafe
-          ls
-          why
+          mono why.exe
