@@ -1,0 +1,11 @@
+.idea/
+.vscode/
+__pycache__/
+
+node_modules/
+
+logs/
+log/
+*.log
+
+*.exe
