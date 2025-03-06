@@ -76,6 +76,7 @@ jobs:
           echo "c(why), why:why()." | erl -s init stop
   csharp:
     runs-on: ubuntu-latest
+    name: C#
     strategy:
       matrix:
         dotnet-version:
@@ -86,8 +87,13 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      # You can test your matrix by printing the current dotnet version
+      - name: Setup console project
+        run: |
+          mkdir myapp
+          cd myapp
+          dotnet new console -n MyConsoleApp
+          mv ../../console/csharp/why.cs ./Program.cs
       - name: Run console
         run: |
-          cd console/csharp
+          cd myapp
           dotnet run
