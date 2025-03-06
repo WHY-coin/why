@@ -77,17 +77,12 @@ jobs:
   csharp:
     runs-on: ubuntu-latest
     name: C#
-    strategy:
-      matrix:
-        dotnet-version:
-          - '6.0.x'
     steps:
       - uses: actions/checkout@v4
-      - name: Install Mono (for `csc` usage)
+      - name: Install Mono
         run: |
           sudo apt update
-          sudo apt install -y mono-complete
-          sudo apt -y install chicken-bin
+          sudo apt install -y mono-complete chicken-bin
       - name: Run console
         run: |
           cd console/csharp
