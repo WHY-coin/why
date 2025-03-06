@@ -62,21 +62,13 @@ The script is composed of several modules and functionalities:
   Install TypeScript globally or locally in your project.
 
 ### Steps
-1. **Compile the TypeScript Code:**  
+1. **Run the TypeScript Code:**  
    Run the following command to compile the script:
    ```bash
-   tsc why.ts
+   tsx why.ts
    ```
-   This will generate a `why.js` file.
 
-2. **Run in Node.js:**  
-   Run the compiled JavaScript file with Node.js:
-   ```bash
-   node why.js
-   ```
-   Note: When running in Node.js, the script will log the final message and test results to the console.
-
-3. **Run in a Browser:**  
+2. **Run in a Browser:**  
    You can also include the compiled JavaScript file in an HTML file. When opened in a browser, the Aurora UI will render and display:
    - Execution logs
    - VirtualAPI (S3) state
@@ -85,7 +77,6 @@ The script is composed of several modules and functionalities:
    - Additional comments on the process
 
 ## What It Shows
-
 - **Execution Logs:**  
   Timestamped logs of various function calls and cache hits.
 - **VirtualAPI Variables:**  
