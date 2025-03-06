@@ -87,6 +87,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y mono-complete
+          sudo apt -y install chicken-bin
       - name: Compile with csc
         run: |
           cd console/csharp
