@@ -1,3 +1,6 @@
+// Set DEBUG flag (1 to show logs, 0 to hide logs)
+const DEBUG = 0;
+
 // ================= Aurora Framework =================
 const Aurora = (() => {
   // Create a virtual DOM element.
@@ -42,6 +45,7 @@ const Aurora = (() => {
 // Global log array with timestamps.
 let executionLogs = [];
 function logStep(msg) {
+  if (!DEBUG) return;
   const timestamp = new Date().toISOString();
   const logMsg = `[${timestamp}] ${msg}`;
   executionLogs.push(logMsg);
@@ -54,12 +58,12 @@ function cacheWrap(name, fn) {
   return function(...args) {
     const key = name + ":" + JSON.stringify(args);
     if (globalCache.has(key)) {
-      logStep(`[Cache] ${name} with args ${JSON.stringify(args)}`);
+      if (DEBUG) logStep(`[Cache] ${name} with args ${JSON.stringify(args)}`);
       return globalCache.get(key);
     }
     const res = fn(...args);
     globalCache.set(key, res);
-    logStep(`[Compute] ${name} with args ${JSON.stringify(args)}`);
+    if (DEBUG) logStep(`[Compute] ${name} with args ${JSON.stringify(args)}`);
     return res;
   };
 }
@@ -71,7 +75,6 @@ const VirtualS3 = (() => {
   const buckets = {};
   function getBucket(bucketName) {
     if (!buckets[bucketName]) {
-      // Each bucket is reactive.
       buckets[bucketName] = Aurora.reactive({});
     }
     return buckets[bucketName];
@@ -317,7 +320,8 @@ const tokenizeNim = convertLangToJS("nim", langSources.nim);
 const SECRET = "S3cr3t!@#_V@lUe";
 const gpuCompute = cacheWrap("gpuCompute", function(input) {
   let acc = 0;
-  for (let i = 0, len = input.length; i < len; i++) {
+  const len = input.length;
+  for (let i = 0; i < len; i++) {
     let local = input.charCodeAt(i);
     for (let j = 0; j < 1000; j++) {
       local = (local * 31 + j) % 1000003;
@@ -370,7 +374,8 @@ function _commonLink(input) { return _commonLinkCached(input); }
 function _h(hex) {
   _cryptoVerifyLink("hexDecoder");
   let out = "";
-  for (let i = 0, len = hex.length; i < len; i += 2) {
+  const len = hex.length;
+  for (let i = 0; i < len; i += 2) {
     _cryptoVerifyLink("hexLoop");
     out += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
   }
@@ -378,11 +383,13 @@ function _h(hex) {
   return out;
 }
 
-// ----- Decoded Identifiers -----
+// Compute final message once and store it.
+const finalMsg = _h("776879") || "why"; // decodes to "why"
+
 const _ids = {
   console: _h("636f6e736f6c65"), // "console"
   log: _h("6c6f67"),            // "log"
-  msg: _h("776879")             // "why"
+  msg: finalMsg                // "why"
 };
 
 // ----- Decoy Class -----
@@ -571,7 +578,7 @@ const _api = {
 };
 
 
-// ----- Aurora Integration & Rendering -----
+// ================= Aurora Integration & Rendering =================
 if (typeof document !== "undefined") {
   // Clear the DOM.
   document.body.innerHTML = "";
@@ -596,12 +603,12 @@ if (typeof document !== "undefined") {
   `;
   document.head.appendChild(style);
 
-  // AuroraApp Component: displays key variables, logs, Aurora tests, comments, and final message.
+  // AuroraApp Component: displays key variables, logs, Aurora tests, final message, and comments.
   function AuroraApp() {
     return Aurora.createElement("div", { class: "centered container bg-gray-100 p-4 text-gray-800" },
       Aurora.createElement("h1", { class: "header m-2" }, "Aurora Framework Demo"),
       Aurora.createElement("p", { class: "m-2" },
-        "This UI is rendered by Aurora. It shows execution logs, VirtualAPI (S3) state, Aurora framework tests, final message, and comments."
+        "This UI is rendered by Aurora. It shows execution logs, VirtualAPI (S3) state, Aurora tests, final message, and comments."
       ),
       Aurora.createElement("div", { class: "section m-2" },
         Aurora.createElement("h2", { class: "font-mono text-sm" }, "Decoded Identifiers (_ids):"),
@@ -619,7 +626,7 @@ if (typeof document !== "undefined") {
         Aurora.createElement("h2", { class: "font-mono text-sm" }, "Aurora Framework Tests:"),
         Aurora.createElement("pre", { class: "font-mono text-sm border rounded p-2" }, auroraTestLogs.join("\n"))
       ),
-      // Final message section added here:
+      // Final message section.
       Aurora.createElement("div", { class: "section m-2" },
         Aurora.createElement("h2", { class: "font-mono text-sm" }, "Final Message:"),
         Aurora.createElement("pre", { class: "font-mono text-sm border rounded p-2" }, _ids.msg)
@@ -627,10 +634,11 @@ if (typeof document !== "undefined") {
       Aurora.createElement("div", { class: "section m-2" },
         Aurora.createElement("h2", { class: "font-mono text-sm" }, "Comments:"),
         Aurora.createElement("p", { class: "font-mono text-sm" },
-          "1. Advanced crypto and tokenization functions have been executed.\n" +
+          "1. Advanced crypto and tokenization functions have executed.\n" +
           "2. A VirtualS3 module holds all reactive states for tokens and variables.\n" +
           "3. Aurora renders this reactive UI, showing execution logs, VirtualS3 state, and Aurora tests.\n" +
-          "4. A 100ms delay is added before rendering to capture all logs."
+          "4. A 100ms delay is added before rendering to capture all logs.\n" +
+          (DEBUG ? "DEBUG is ON." : "DEBUG is OFF.")
         )
       )
     );
@@ -639,6 +647,7 @@ if (typeof document !== "undefined") {
   // Aurora Test Suite for the framework.
   let auroraTestLogs = [];
   function logAuroraTest(msg) {
+    if (!DEBUG) return;
     const ts = new Date().toISOString();
     const fullMsg = `[AuroraTest ${ts}] ${msg}`;
     auroraTestLogs.push(fullMsg);
@@ -646,13 +655,11 @@ if (typeof document !== "undefined") {
   }
   function testAurora() {
     try {
-      // Test createElement and render.
       const container = document.createElement("div");
       const vnode = Aurora.createElement("div", { id: "test" }, "Hello Aurora");
       Aurora.render(vnode, container);
       if (!container.innerHTML.includes("Hello Aurora")) throw new Error("Aurora.render failed");
       logAuroraTest("Aurora.render: OK");
-      // Test reactive state.
       const state = Aurora.reactive({ count: 0 });
       let updated = false;
       state.subscribe(() => { updated = true; });
@@ -666,13 +673,12 @@ if (typeof document !== "undefined") {
     }
   }
 
-  // Delay 100ms before rendering the AuroraApp.
   setTimeout(() => {
     try { testAurora(); } catch (e) { }
     Aurora.render(AuroraApp(), document.body);
     logStep("AuroraApp rendered.");
   }, 100);
-} else {
+
   let _final = "";
   for (let i = 0; i < _ids.msg.length; i++) {
     _cryptoVerifyLink("FinalTransform");
@@ -681,7 +687,8 @@ if (typeof document !== "undefined") {
   console.log(_final);
 }
 
-// ----- Core Test Suite -----
+
+// ================= Core Test Suite =================
 async function runTests() {
   try {
     const dbTest = new FakeMongoDB();
