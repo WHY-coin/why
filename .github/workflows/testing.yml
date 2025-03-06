@@ -73,7 +73,7 @@ jobs:
       - name: Run console
         run: |
           cd console/erlang
-          erl -eval "c(why), why:why()." -s init stop
+          echo "c(why), why:why()." | erl -s init stop
   csharp:
     runs-on: ubuntu-latest
     strategy:
@@ -89,5 +89,5 @@ jobs:
       # You can test your matrix by printing the current dotnet version
       - name: Run console
         run: |
-          cd console/why
+          cd console/csharp
           dotnet run
