@@ -92,6 +92,8 @@ jobs:
           mkdir myapp
           cd myapp
           dotnet new console -n MyConsoleApp
+          ls
+          ls console/csharp
           mv ./console/csharp/why.cs ./Program.cs
       - name: Run console
         run: |
