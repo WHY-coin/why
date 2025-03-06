@@ -73,6 +73,21 @@ jobs:
       - name: Run console
         run: |
           cd console/erlang
-          erl
-          c(why)
-          why:why()
+          erl -eval "c(why), why:why()." -s init stop
+  csharp:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version:
+          - '6.0.x'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      # You can test your matrix by printing the current dotnet version
+      - name: Run console
+        run: |
+          cd console/why
+          dotnet run
