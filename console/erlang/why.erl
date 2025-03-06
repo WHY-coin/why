@@ -1,3 +1,4 @@
--module(hello).
+-module(why).
 -export([why/0]).
-why() -> io:fwrite("Why?\n").
+
+why() -> io:fwrite("why").

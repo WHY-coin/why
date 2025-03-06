@@ -74,5 +74,5 @@ jobs:
         run: |
           cd console/erlang
           erl
-          c(hello)
-          hello:why()
+          c(why)
+          why:why()
