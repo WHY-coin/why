@@ -111,10 +111,8 @@ jobs:
           node-version: '20'
       - name: Install TypeScript
         run: |
-          npm i -g typescript
-          npm i --save-dev @types/node
+          npm i -g tsx
       - name: Compile and run TypeScript file
         run: |
           cd console/ts
-          tsc why.ts
-          node why.js
+          tsx why.js
