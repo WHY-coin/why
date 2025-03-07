@@ -90,6 +90,15 @@ jobs:
           cd console/csharp
           dotnet run --project WhyApp.csproj
 
+  sh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run console
+        run: |
+          cd console/sh
+          sh why.sh
+
   javascript:
     runs-on: ubuntu-latest
     steps:
