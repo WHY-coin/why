@@ -87,7 +87,7 @@ jobs:
           sudo apt update
           sudo apt install -y gnupg ca-certificates
           sudo wget https://download.mono-project.com/repo/xamarin.gpg -O /usr/share/keyrings/xamarin.gpg
-          echo "deb [signed-by=/usr/share/keyrings/xamarin.gpg] https://download.mono-project.com/repo/ubuntu preview-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-preview.list
+          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           sudo apt update
           sudo apt install -y mono-complete
           mono --version
