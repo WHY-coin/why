@@ -13,11 +13,26 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Numerics;
 using System.Reflection;
+using Why;
 
 #if UNITY_5_3_OR_NEWER
 using UnityEngine;
 #endif
 
+#if IS_CONSOLE_APP
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        bool enableLogging = args.Contains("--log");
+        bool fastMode = args.Contains("--fast");
+        
+        var why = new WhyProgram();
+        
+        why.Run(enableLogging, fastMode);
+    }
+}
+#endif
 
 namespace Why
 {
@@ -25,11 +40,8 @@ namespace Why
 #if IS_CONSOLE_APP
     public sealed class WhyProgram
     {
-        public static void Main(string[] args)
+        public void Run(bool enableLogging, bool fastMode)
         {
-            bool enableLogging = args.Contains("--log");
-            bool fastMode = args.Contains("--fast");
-            
             IWhyProcessor processor = WhyFactory.CreateProcessor(enableLogging, fastMode);
             
             processor.Process();
