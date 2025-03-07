@@ -1115,10 +1115,10 @@ namespace Why
             i++;
         }
 
-        public readonly struct Token
+        public struct Token
         {
-            public readonly TokenType Type;
-            public readonly string Value;
+            public TokenType Type;
+            public string Value;
             
             public Token(TokenType type, string value)
             {
