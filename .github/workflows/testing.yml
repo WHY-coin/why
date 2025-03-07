@@ -78,25 +78,19 @@ jobs:
           echo "c(why), why:why()." | erl -s init stop
 
   csharp:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     name: C#
     steps:
       - uses: actions/checkout@v4
-      - name: Install Mono
-        run: |
-          sudo apt update
-          sudo apt install -y gnupg ca-certificates
-          sudo mkdir -p /etc/apt/keyrings
-          curl -fsSL https://download.mono-project.com/repo/xamarin.gpg | sudo tee /etc/apt/keyrings/xamarin.gpg >/dev/null
-          echo "deb [signed-by=/etc/apt/keyrings/xamarin.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-          sudo apt update
-          sudo apt install -y mono-complete
-          mono --version
-      - name: Run console
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' # Используй актуальную версию
+      - name: Build and Run
         run: |
           cd console/csharp
-          mono-csc why.cs -unsafe
-          mono why.exe
+          csc why.cs -unsafe
+          .\why.exe
 
   javascript:
     runs-on: ubuntu-latest
