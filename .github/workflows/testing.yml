@@ -82,14 +82,15 @@ jobs:
     name: C#
     steps:
       - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x' # Используй актуальную версию
+      - name: Install Microsoft Build Tools
+        run: |
+          choco install microsoft-build-tools -y
+          echo "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin" | Out-File -Append -Encoding utf8 $env:GITHUB_PATH
+          echo "C:\Windows\Microsoft.NET\Framework64\v4.0.30319" | Out-File -Append -Encoding utf8 $env:GITHUB_PATH
       - name: Build and Run
         run: |
           cd console/csharp
-          csc why.cs -unsafe
+          csc why.cs /unsafe
           .\why.exe
 
   javascript:
