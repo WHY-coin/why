@@ -11,13 +11,15 @@ This code is designed to work in both **Unity** and **C# Console Applications**,
 
 ### Running as a C# Console Application
 1. **Create a new C# Console Project** in your preferred IDE.
-2. **Copy `Why.cs`** into your project.
+2. **Copy `why.cs`** into your project.
 3. **Modify `Program.cs`** (or ensure `WhyProgram.Main();` is called).
 4. **Build and Run** the project using:
     ```sh
     dotnet run
     ```
-5. **Observe the output** in the console.
+6. **Observe the output** in the console.
+
+You can add the '--log' and '--fast' arguments if needed.
 
 ## Compilation Instructions
 
