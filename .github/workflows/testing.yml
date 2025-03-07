@@ -42,7 +42,7 @@ jobs:
           nim-version: ${{ matrix.nim-version }}
       - name: Run console
         run: |
-          nim c -r console/nim/why.nim
+          nim c -r -d:danger --hints:off --warnings:off --checks:off console/nim/why.nim
 
   python:
     name: Python
