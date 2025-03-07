@@ -752,7 +752,7 @@ namespace Why
                 _logger.LogStep("Generating encryption keys...", "CRYPTO");
                 _logger.LogStep("Encrypting data...", "CRYPTO");
                 
-                byte[] encrypted = _crypto.Encrypt(Encoding.UTF8.GetBytes(buffer), [42, 17, 99]);
+                byte[] encrypted = _crypto.Encrypt(Encoding.UTF8.GetBytes(buffer), new byte[]{ 42, 17, 99 });
 
                 _logger.LogStep($"Encrypted hash: {BitConverter.ToString(encrypted)}", "CRYPTO");
                 _logger.LogStep("Validation complete, producing final output...", "OUTPUT");
@@ -938,16 +938,15 @@ namespace Why
                             {
                                 object value;
                                 
-                                switch (member)
+                                if (member is FieldInfo field)
                                 {
-                                    case FieldInfo field:
-                                        value = Deserialize(field.FieldType, tokens);
-                                        field.SetValue(instance, value);
-                                        break;
-                                    case PropertyInfo property:
-                                        value = Deserialize(property.PropertyType, tokens);
-                                        property.SetValue(instance, value);
-                                        break;
+                                    value = Deserialize(field.FieldType, tokens);
+                                    field.SetValue(instance, value);
+                                }
+                                else if (member is PropertyInfo property)
+                                {
+                                    value = Deserialize(property.PropertyType, tokens);
+                                    property.SetValue(instance, value);
                                 }
                             }
                         }
