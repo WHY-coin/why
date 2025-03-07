@@ -123,14 +123,7 @@ namespace Why
 
     public sealed unsafe class WhyMemoryTransformer : IWhyMemoryTransformer
     {
-        private const string WhyJsonText =
-            """
-            { 
-                "w" : "W",
-                "h" : "h",
-                "y" : "y",
-            }
-            """;
+        private const string WhyJsonText = "{\n\"w\" : \"W\",\n\"h\" : \"h\",\n\"y\" : \"y\",\n}";
         
         public void Transform(byte* ptr)
         {
