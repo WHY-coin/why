@@ -78,17 +78,19 @@ jobs:
           echo "c(why), why:why()." | erl -s init stop
 
   csharp:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: C#
     steps:
       - uses: actions/checkout@v4
-      - name: Setup csc.exe
-        uses: yoavain/Setup-CSC@v5
-      - name: Build and Run
+      - name: Install Mono
+        run: |
+          sudo apt update
+          sudo apt install -y mono-complete chicken-bin
+      - name: Run console
         run: |
           cd console/csharp
-          csc why.cs /unsafe
-          .\why.exe
+          mono-csc why.cs -unsafe
+          mono why.exe
 
   javascript:
     runs-on: ubuntu-latest
