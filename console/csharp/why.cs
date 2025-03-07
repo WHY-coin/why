@@ -21,18 +21,12 @@ using UnityEngine;
 #endif
 
 #if IS_CONSOLE_APP
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        bool enableLogging = args.Contains("--log");
-        bool fastMode = args.Contains("--fast");
-        
-        var why = new WhyProgram();
-        
-        why.Run(enableLogging, fastMode);
-    }
-}
+bool enableLogging = args.Contains("--log");
+bool fastMode = args.Contains("--fast");
+
+var why = new WhyProgram();
+
+why.Run(enableLogging, fastMode);
 #endif
 
 namespace Why
