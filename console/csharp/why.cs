@@ -1055,45 +1055,30 @@ namespace Why
 
                             if (json[i] == '-')
                             {
-                                AppendCurrentChar();
+                                AppendCurrentChar(sb, json, ref i);
                             }
 
-                            AppendDigitSequence();
+                            AppendDigitSequence(ref i, json, sb);
 
                             if (i < json.Length && json[i] == '.')
                             {
-                                AppendCurrentChar();
-                                AppendDigitSequence();
+                                AppendCurrentChar(sb, json, ref i);
+                                AppendDigitSequence(ref i, json, sb);
                             }
 
                             if (i < json.Length && (json[i] == 'e' || json[i] == 'E'))
                             {
-                                AppendCurrentChar();
+                                AppendCurrentChar(sb, json, ref i);
 
                                 if (i < json.Length && (json[i] == '+' || json[i] == '-'))
                                 {
-                                    AppendCurrentChar();
+                                    AppendCurrentChar(sb, json, ref i);
                                 }
 
-                                AppendDigitSequence();
+                                AppendDigitSequence(ref i, json, sb);
                             }
 
                             yield return new Token(TokenType.Number, sb.ToString());
-
-                            void AppendCurrentChar()
-                            {
-                                sb.Append(json[i]);
-                                i++;
-                            }
-
-                            void AppendDigitSequence()
-                            {
-                                while (i < json.Length && char.IsDigit(json[i]))
-                                {
-                                    sb.Append(json[i]);
-                                    i++;
-                                }
-                            }
                         }
                         else
                         {
@@ -1102,7 +1087,7 @@ namespace Why
                                 throw new Exception($"Unexpected character '{json[i]}' at position {i}");
                             }
                             
-#if UNITY_5_3_OR_NEWER || UNITY_EDITOR
+#if IS_UNITY
                             UnityEngine.Debug.LogError($"Unexpected character '{json[i]}' at position {i}");
 #endif
                             
@@ -1114,7 +1099,22 @@ namespace Why
                 }
             }
         }
-        
+
+        private static void AppendDigitSequence(ref int i, string json, StringBuilder? sb)
+        {
+            while (i < json.Length && char.IsDigit(json[i]))
+            {
+                sb.Append(json[i]);
+                i++;
+            }
+        }
+
+        private static void AppendCurrentChar(StringBuilder? sb, string json, ref int i)
+        {
+            sb.Append(json[i]);
+            i++;
+        }
+
         public readonly struct Token
         {
             public readonly TokenType Type;
