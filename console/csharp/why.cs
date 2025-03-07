@@ -4,6 +4,7 @@
 #define IS_UNITY
 #endif
 
+using System;
 using System.Collections;
 using System.Globalization;
 using System.Runtime.InteropServices;
