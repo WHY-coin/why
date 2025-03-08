@@ -1,4 +1,6 @@
-# 🚀 Pull Request
+# 🚀 Add new language [LANGUAGE]
+
+<!-- Please add language into name of PR like `Added a new language [Java]` -->
 
 ## 📌 Description
 <!-- Describe what your PR adds. For example: -->
