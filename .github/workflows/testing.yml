@@ -88,7 +88,7 @@ jobs:
       - name: Run console
         run: |
           cd console/csharp
-          dotnet run --project WhyApp.csproj
+          dotnet run --project WhyApp.csproj --fast
 
   sh:
     runs-on: ubuntu-latest
