@@ -1,1 +1,1 @@
-•Show "BQN"
+•Show "why"
